@@ -89,12 +89,14 @@ function addTask(){let input=document.getElementById('newTask'),v=input.value.tr
 function renderSeasonal(){return DATA.seasonal.map((x,i)=>checkbox(x,String(i),'seasonal')).join('')}
 
 function plannerCatalog(){
- const groups=[{title:'✨ Благословение дома',items:DATA.weekly.map((name,i)=>({id:'weekly:'+i,name,kind:'weekly',key:String(i)}))},
- {title:'🎄 Сезоны и украшение',items:DATA.seasonal.map((name,i)=>({id:'seasonal:'+i,name,kind:'seasonal',key:String(i)}))}];
-
- const z=state.zone,zone=DATA.zones[z];categories.slice(1).forEach(cat=>groups.push({title:'🏡 Текущая зона '+(z+1)+' · '+cat+' · '+zone.name,items:getTasks(z,cat).map(t=>({id:'zone:'+t.id,name:t.name,kind:'done',key:t.id}))}));
- groups.push({title:'✏️ Мои дела',items:state.planCustom.map(t=>({id:'own:'+t.id,name:t.name,kind:'own',key:t.id}))});
- return groups
+ const z=state.zone,zone=DATA.zones[z];
+ return [
+ {title:'✏️ Мои дела',items:state.planCustom.map(t=>({id:'own:'+t.id,name:t.name,kind:'own',key:t.id}))},
+ {title:'🏡 Текущая зона '+(z+1)+' · Глубокая уборка · '+zone.name,items:getTasks(z,'Глубокая уборка').map(t=>({id:'zone:'+t.id,name:t.name,kind:'done',key:t.id}))},
+ {title:'✨ Благословение дома',items:DATA.weekly.map((name,i)=>({id:'weekly:'+i,name,kind:'weekly',key:String(i)}))},
+ {title:'🛠️ Текущая зона '+(z+1)+' · Улучшения · '+zone.name,items:getTasks(z,'Улучшения').map(t=>({id:'zone:'+t.id,name:t.name,kind:'done',key:t.id}))},
+ {title:'🎄 Сезоны и украшение',items:DATA.seasonal.map((name,i)=>({id:'seasonal:'+i,name,kind:'seasonal',key:String(i)}))}
+ ]
 }
 function plannerItems(){return plannerCatalog().flatMap(g=>g.items)}
 function plannerDay(){const date=state.planDate||day();if(!state.plans[date]||!Array.isArray(state.plans[date]))state.plans[date]=[];return state.plans[date]}
