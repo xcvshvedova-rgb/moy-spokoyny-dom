@@ -92,7 +92,7 @@ function plannerCatalog(){
  const groups=[{title:'✨ Благословение дома',items:DATA.weekly.map((name,i)=>({id:'weekly:'+i,name,kind:'weekly',key:String(i)}))},
  {title:'🎄 Сезоны и украшение',items:DATA.seasonal.map((name,i)=>({id:'seasonal:'+i,name,kind:'seasonal',key:String(i)}))}];
 
- DATA.zones.forEach((zone,z)=>categories.slice(1).forEach(cat=>groups.push({title:'🏡 Зона '+(z+1)+' · '+cat+' · '+zone.name,items:getTasks(z,cat).map(t=>({id:'zone:'+t.id,name:t.name,kind:'done',key:t.id}))})));
+ const z=state.zone,zone=DATA.zones[z];categories.slice(1).forEach(cat=>groups.push({title:'🏡 Текущая зона '+(z+1)+' · '+cat+' · '+zone.name,items:getTasks(z,cat).map(t=>({id:'zone:'+t.id,name:t.name,kind:'done',key:t.id}))}));
  groups.push({title:'✏️ Мои дела',items:state.planCustom.map(t=>({id:'own:'+t.id,name:t.name,kind:'own',key:t.id}))});
  return groups
 }
@@ -111,7 +111,7 @@ function renderPlanner(){
  for(const item of list){const task=lookup.get(item.id);const name=task?task.name:'Задача удалена из исходного списка';html+='<div class="planner-item"><label class="task '+(item.done?'done':'')+'"><input type="checkbox" '+(item.done?'checked':'')+' onchange="plannerComplete('+esc(JSON.stringify(item.id))+',this.checked)"><span>'+esc(name)+'</span></label><button title="Убрать из плана" aria-label="Убрать из плана" onclick="plannerAdd('+esc(JSON.stringify(item.id))+',false)">✕</button></div>'}
  html+='<div class="buttons" style="margin:14px 0"><button onclick="plannerMove()">↪ Перенести невыполненное на завтра</button></div>';
  html+='<div class="add"><input id="plannerNew" type="text" maxlength="180" placeholder="Добавить своё дело" onkeydown="if(event.key===\'Enter\')plannerNew()"><button class="primary" onclick="plannerNew()">+ Добавить</button></div>';
- html+='<h3>Выбрать задачи</h3><p class="muted">Раскрой нужную категорию. Можно выбрать задачи из любой из пяти зон, независимо от текущей зоны наверху.</p>';
+ html+='<h3>Выбрать задачи</h3><p class="muted">Раскрой нужную категорию. Здесь показаны задачи только выбранной наверху зоны. Чтобы увидеть другую, переключи зону в начале страницы.</p>';
  for(const group of all){const count=group.items.filter(x=>selected.has(x.id)).length;html+='<details class="planner-group"><summary>'+esc(group.title)+' <span class="mini">'+count+'/'+group.items.length+'</span></summary>';
  for(const task of group.items){html+='<label class="planner-choice"><input type="checkbox" '+(selected.has(task.id)?'checked':'')+' onchange="plannerAdd('+esc(JSON.stringify(task.id))+',this.checked)"><span>'+esc(task.name)+'</span></label>'}
  html+='</details>'}
