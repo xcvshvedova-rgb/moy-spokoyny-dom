@@ -91,7 +91,7 @@ function renderSeasonal(){return DATA.seasonal.map((x,i)=>checkbox(x,String(i),'
 function plannerCatalog(){
  const groups=[{title:'✨ Благословение дома',items:DATA.weekly.map((name,i)=>({id:'weekly:'+i,name,kind:'weekly',key:String(i)}))},
  {title:'🎄 Сезоны и украшение',items:DATA.seasonal.map((name,i)=>({id:'seasonal:'+i,name,kind:'seasonal',key:String(i)}))}];
- for(const [room,items] of Object.entries(HOTSPOTS))groups.push({title:'🔥 Хотспоты · '+room,items:items.map((name,i)=>({id:'hotspot:'+room+'|'+i,name,kind:'hotspots',key:room+'|'+i}))});
+
  DATA.zones.forEach((zone,z)=>categories.slice(1).forEach(cat=>groups.push({title:'🏡 Зона '+(z+1)+' · '+cat+' · '+zone.name,items:getTasks(z,cat).map(t=>({id:'zone:'+t.id,name:t.name,kind:'done',key:t.id}))})));
  groups.push({title:'✏️ Мои дела',items:state.planCustom.map(t=>({id:'own:'+t.id,name:t.name,kind:'own',key:t.id}))});
  return groups
